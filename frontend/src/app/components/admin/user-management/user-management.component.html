@@ -1,0 +1,20 @@
+<h1>Gestión de Usuarios</h1>
+
+<form (submit)="createUser(username.value, password.value, role.value)">
+  <input
+    #username
+    type="text"
+    placeholder="Correo Electrónico (ups.edu.ec)"
+    required
+  />
+  <input #password type="password" placeholder="Contraseña" required />
+  <select #role>
+    <option value="operator">Operador</option>
+    <option value="admin">Administrador</option>
+  </select>
+  <button type="submit">Crear Usuario</button>
+</form>
+
+<ul>
+  <li *ngFor="let user of users">{{ user.username }} - {{ user.role }}</li>
+</ul>
