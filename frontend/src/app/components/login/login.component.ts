@@ -16,12 +16,8 @@ export class LoginComponent {
   onSubmit() {
     this.authService.login(this.email, this.password).subscribe(
       (response) => {
-        // Actualizar el estado de autenticación y el rol
-        this.authService.setLoggedIn(true);
-        this.authService.setRole(response.role);
-
-        // Redirigir según el rol del usuario
-        const role = response.role;
+        this.authService.handleLoginResponse(response);
+        const role = this.authService.getRole();
         if (role === 'admin') {
           this.router.navigate(['/admin']);
         } else if (role === 'operator') {

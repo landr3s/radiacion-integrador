@@ -17,16 +17,8 @@ export class AuthService {
     return this.http.post<any>(this.apiUrl, { username: email, password });
   }
 
-  isLoggedIn(): boolean {
-    return this.loggedIn.value;
-  }
-
   setLoggedIn(status: boolean): void {
     this.loggedIn.next(status);
-  }
-
-  getRole(): string {
-    return this.userRole.value;
   }
 
   setRole(role: string): void {
@@ -36,5 +28,10 @@ export class AuthService {
   logout(): void {
     this.setLoggedIn(false);
     this.setRole('');
+    localStorage.removeItem('token'); // Asegúrate de eliminar el token al cerrar sesión
+  }
+
+  getToken(): string | null {
+    return localStorage.getItem('token');
   }
 }

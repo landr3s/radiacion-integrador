@@ -1,6 +1,11 @@
 <h1>Gestión de Usuarios</h1>
 
-<form (submit)="createUser(username.value, password.value, role.value)">
+<form
+  (submit)="
+    createUser(username.value, password.value, role.value);
+    $event.preventDefault()
+  "
+>
   <input
     #username
     type="text"
@@ -14,6 +19,13 @@
   </select>
   <button type="submit">Crear Usuario</button>
 </form>
+
+<div *ngIf="successMessage" class="alert alert-success">
+  {{ successMessage }}
+</div>
+<div *ngIf="errorMessage" class="alert alert-danger">
+  {{ errorMessage }}
+</div>
 
 <ul>
   <li *ngFor="let user of users">{{ user.username }} - {{ user.role }}</li>

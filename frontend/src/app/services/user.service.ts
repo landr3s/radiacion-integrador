@@ -1,17 +1,26 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
+import { AuthService } from './auth.service'; // Asegúrate de tener tu servicio de autenticación
 
 @Injectable({
   providedIn: 'root',
 })
 export class UserService {
-  private baseUrl = 'http://localhost:3001/api/users';
+  private apiUrl = `${environment.apiUrl}/api/users`;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private authService: AuthService) {}
+
+  private getHeaders() {
+    const token = localStorage.getItem('token'); // O como tengas configurado el token
+    return new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
+  }
 
   getUsers(): Observable<any[]> {
-    return this.http.get<any[]>(this.baseUrl, this.getHeaders());
+    return this.http.get<any[]>(this.apiUrl, { headers: this.getHeaders() });
   }
 
   createUser(
@@ -20,18 +29,17 @@ export class UserService {
     role: string
   ): Observable<any> {
     return this.http.post<any>(
-      this.baseUrl,
+      this.apiUrl,
       { username, password, role },
-      this.getHeaders()
+      { headers: this.getHeaders() }
     );
   }
 
-  private getHeaders() {
-    const token = localStorage.getItem('token');
-    return {
-      headers: new HttpHeaders({
-        Authorization: `Bearer ${token}`,
-      }),
-    };
+  updateUser(userId: string, username: string): Observable<any> {
+    return this.http.put<any>(
+      `${this.apiUrl}/${userId}`,
+      { username },
+      { headers: this.getHeaders() }
+    );
   }
 }
