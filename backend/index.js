@@ -5,6 +5,7 @@ import { PORT } from './config.js'
 import usersRouter from './controllers/users.js'
 import loginRouter from './controllers/login.js'
 import dotenv from 'dotenv'
+import sensorRouter from './controllers/sensor.js'
 
 dotenv.config()
 
@@ -24,6 +25,7 @@ app.use(express.json())
 
 app.use('/api/users', usersRouter)
 app.use('/api/login', loginRouter)
+app.use('/api/sensor', sensorRouter)
 
 app.listen(PORT, () => {
   console.log(`Server running at http://localhost:${PORT}`)

@@ -17,18 +17,32 @@ export class AuthService {
     return this.http.post<any>(this.apiUrl, { username: email, password });
   }
 
+  handleLoginResponse(response: any): void {
+    localStorage.setItem('token', response.token);
+    this.setLoggedIn(true);
+    this.setRole(response.role);
+  }
+
   setLoggedIn(status: boolean): void {
     this.loggedIn.next(status);
+  }
+
+  isLoggedIn(): boolean {
+    return this.loggedIn.value;
   }
 
   setRole(role: string): void {
     this.userRole.next(role);
   }
 
+  getRole(): string {
+    return this.userRole.value;
+  }
+
   logout(): void {
     this.setLoggedIn(false);
     this.setRole('');
-    localStorage.removeItem('token'); // Asegúrate de eliminar el token al cerrar sesión
+    localStorage.removeItem('token');
   }
 
   getToken(): string | null {

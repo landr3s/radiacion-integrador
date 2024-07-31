@@ -26,4 +26,34 @@ usersRouter.get('/', async (req, res) => {
   res.json(users)
 })
 
+// Método PUT para actualizar un usuario
+usersRouter.put('/:id', async (req, res) => {
+  const { id } = req.params
+  const { username, password, role } = req.body
+
+  // Verificar que el role sea válido si se está actualizando
+  if (role && role !== 'operator' && role !== 'admin') {
+    return res.status(400).json({ error: 'Invalid role' })
+  }
+
+  const updatedUserData = {}
+  if (username) updatedUserData.username = username
+  if (password) updatedUserData.passwordHash = password // Asumiendo que la contraseña ya está hasheada
+
+  if (role) updatedUserData.role = role
+
+  try {
+    const updatedUser = await User.findByIdAndUpdate(id, updatedUserData, {
+      new: true,
+    })
+    if (!updatedUser) {
+      return res.status(404).json({ error: 'User not found' })
+    }
+
+    res.json(updatedUser)
+  } catch (error) {
+    res.status(500).json({ error: 'Server error' })
+  }
+})
+
 export default usersRouter

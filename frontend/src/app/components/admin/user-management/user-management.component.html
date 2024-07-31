@@ -27,6 +27,31 @@
   {{ errorMessage }}
 </div>
 
-<ul>
-  <li *ngFor="let user of users">{{ user.username }} - {{ user.role }}</li>
-</ul>
+<table>
+  <tr *ngFor="let user of users">
+    <td>{{ user.username }}</td>
+    <td>{{ user.role }}</td>
+    <td>
+      <button (click)="editUser(user)">Editar</button>
+    </td>
+  </tr>
+</table>
+
+<div *ngIf="selectedUser">
+  <h2>Editar Usuario</h2>
+  <form
+    (submit)="
+      updateUser(selectedUser.id, updatedUsername.value);
+      $event.preventDefault()
+    "
+  >
+    <input
+      #updatedUsername
+      [value]="selectedUser.username"
+      type="text"
+      placeholder="Nuevo Correo Electrónico"
+      required
+    />
+    <button type="submit">Guardar Cambios</button>
+  </form>
+</div>

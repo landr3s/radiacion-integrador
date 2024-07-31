@@ -1,4 +1,23 @@
-<h1>Dashboard</h1>
-<p>
-  Aquí se muestra un dashboard con las consultas y gráficos para el operador.
-</p>
+<!-- dashboard.component.html -->
+<h1>Dashboard del Operador</h1>
+
+<div *ngIf="sensorData.length > 0; else noData">
+  <table>
+    <thead>
+      <tr>
+        <th>Valor del Sensor</th>
+        <th>Timestamp</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let data of sensorData">
+        <td>{{ data.sensorValue }}</td>
+        <td>{{ data.timestamp | date : "short" }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<ng-template #noData>
+  <p>No hay datos disponibles del sensor.</p>
+</ng-template>

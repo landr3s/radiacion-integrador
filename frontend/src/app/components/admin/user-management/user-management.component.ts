@@ -10,6 +10,7 @@ export class UserManagementComponent implements OnInit {
   users: any[] = [];
   successMessage: string = '';
   errorMessage: string = '';
+  selectedUser: any = null;
 
   constructor(private userService: UserService) {}
 
@@ -39,6 +40,27 @@ export class UserManagementComponent implements OnInit {
       (error) => {
         console.error('Error creating user', error);
         this.errorMessage = 'Error al crear el usuario.';
+        this.successMessage = ''; // Clear any previous success messages
+      }
+    );
+  }
+
+  editUser(user: any) {
+    this.selectedUser = { ...user }; // Spread operator to create a copy
+  }
+
+  updateUser(userId: string, username: string) {
+    this.userService.updateUser(userId, username).subscribe(
+      (updatedUser) => {
+        const index = this.users.findIndex((user) => user.id === userId);
+        this.users[index].username = username;
+        this.selectedUser = null;
+        this.successMessage = 'Usuario actualizado correctamente.';
+        this.errorMessage = ''; // Clear any previous error messages
+      },
+      (error) => {
+        console.error('Error updating user', error);
+        this.errorMessage = 'Error al actualizar el usuario.';
         this.successMessage = ''; // Clear any previous success messages
       }
     );
